@@ -27,6 +27,7 @@ namespace LoaderSkipper
 		private GameObject head, lController, rController, root;
 		private PlayerMeasurement playerMeasurement;
 		private bool measurementGot = false;
+		private object coroutineObj;
 
 		public override void OnUpdate()
 		{
@@ -65,8 +66,17 @@ namespace LoaderSkipper
 			}
 			if (init && (currentScene == "Loader") && (status.GetComponent<TextMeshProUGUI>().text == "Ready to RUMBLE!"))
 			{
-				sceneManager.PerformStartupGymLoad();
+				coroutineObj = MelonCoroutines.Start(StartGymLoad());
 			}
+		}
+
+		public IEnumerator StartGymLoad()
+		{
+			yield return new WaitForFixedUpdate();
+			yield return new WaitForFixedUpdate();
+			yield return new WaitForFixedUpdate();
+			sceneManager.PerformStartupGymLoad();
+			MelonCoroutines.Stop(coroutineObj);
 		}
 
 		public void SetTPose()
