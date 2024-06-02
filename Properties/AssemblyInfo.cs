@@ -1,10 +1,14 @@
 ﻿using LoaderSkipper; // The namespace of your mod class
 using MelonLoader;
+using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 // ...
-[assembly: MelonInfo(typeof(main), "LoaderSkipper", "2.2.2", "UlvakSkillz")]
+[assembly: MelonInfo(typeof(main), "LoaderSkipper", "2.2.4", "UlvakSkillz")]
 [assembly: MelonGame("Buckethead Entertainment", "RUMBLE")]
+[assembly: MelonColor(ConsoleColor.Magenta)]
+[assembly: MelonAuthorColor(ConsoleColor.Magenta)]
+[assembly: VerifyLoaderVersion(0, 5, 7)]
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information

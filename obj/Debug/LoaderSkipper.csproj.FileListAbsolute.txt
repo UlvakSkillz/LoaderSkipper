@@ -122,3 +122,4 @@ C:\Users\austi\source\repos\LoaderSkipper\LoaderSkipper\obj\Debug\LoaderSkipper.
 C:\Users\austi\source\repos\LoaderSkipper\LoaderSkipper\obj\Debug\LoaderSkipper.dll
 C:\Users\austi\source\repos\LoaderSkipper\LoaderSkipper\obj\Debug\LoaderSkipper.pdb
 C:\Users\austi\source\repos\LoaderSkipper\LoaderSkipper\bin\Debug\RumbleModdingAPI.dll
+C:\Users\austi\source\repos\LoaderSkipper\LoaderSkipper\obj\Debug\LoaderSkipper.csproj.AssemblyReference.cache

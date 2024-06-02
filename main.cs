@@ -47,11 +47,15 @@ namespace LoaderSkipper
 				}
 				if (currentScene == "Gym")
 				{
-					if (!measurementGot)
+					if (!measurementGot && playerManager.localPlayer != null && playerManager.localPlayer.Data != null)
 					{
 						playerMeasurement = playerManager.localPlayer.Data.PlayerMeasurement;
 						measurementGot = true;
 					}
+                    else
+                    {
+						return;
+                    }
 				}
 				if (!tPoseSet && (currentScene == "Gym"))
 				{
@@ -72,9 +76,10 @@ namespace LoaderSkipper
 
 		public IEnumerator StartGymLoad()
 		{
-			yield return new WaitForFixedUpdate();
-			yield return new WaitForFixedUpdate();
-			yield return new WaitForFixedUpdate();
+			for (int i = 0; i < 100; i++)
+			{
+				yield return new WaitForFixedUpdate();
+			}
 			sceneManager.PerformStartupGymLoad();
 			MelonCoroutines.Stop(coroutineObj);
 		}
