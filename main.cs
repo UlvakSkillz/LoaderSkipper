@@ -1,11 +1,11 @@
 ﻿using MelonLoader;
-using RUMBLE.Managers;
-using RUMBLE.Players.Scaling;
+using Il2CppRUMBLE.Managers;
+using Il2CppRUMBLE.Players.Scaling;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using TMPro;
+using Il2CppTMPro;
 using UnityEngine;
 
 namespace LoaderSkipper
