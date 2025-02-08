@@ -12,7 +12,6 @@ namespace LoaderSkipper
 {
 	public class main : MelonMod
 	{
-		private SceneManager sceneManager;
 		private GameObject status;
 		private string currentScene = "";
 		private bool sceneChanged = false;
@@ -22,24 +21,19 @@ namespace LoaderSkipper
 		private string FILENAME = @"OverrideLastTpose.txt";
 		private static string FILEPATHLastTPose = @"UserData\LoaderSkipper\LastTpose.txt";
 		private bool tPoseSet = false;
-		private static PlayerManager playerManager;
 		private static Transform[] measurements = new Transform[4];
 		private GameObject head, lController, rController, root;
 		private PlayerMeasurement playerMeasurement;
 		private bool measurementGot = false;
-		private object coroutineObj;
 
-		public override void OnUpdate()
+		public override void OnFixedUpdate()
 		{
 			if (sceneChanged)
 			{
 				try
 				{
-					sceneManager = SceneManager.instance;
 					status = GameObject.Find("________________SCENE_________________/Text/Measuring/TextCanvas/Status");
-					playerManager = PlayerManager.instance;
 					init = true;
-					sceneChanged = false;
 				}
 				catch
 				{
@@ -47,9 +41,9 @@ namespace LoaderSkipper
 				}
 				if (currentScene == "Gym")
 				{
-					if (!measurementGot && playerManager.localPlayer != null && playerManager.localPlayer.Data != null)
+					if (!measurementGot && PlayerManager.instance.localPlayer != null && PlayerManager.instance.localPlayer.Data != null)
 					{
-						playerMeasurement = playerManager.localPlayer.Data.PlayerMeasurement;
+						playerMeasurement = PlayerManager.instance.localPlayer.Data.PlayerMeasurement;
 						measurementGot = true;
 					}
                     else
@@ -61,29 +55,27 @@ namespace LoaderSkipper
 				{
 					SetTPose();
 					tPoseSet = true;
-				}
-			}
-			if (measurementGot && ((playerMeasurement.ArmSpan != playerManager.localPlayer.Data.PlayerMeasurement.ArmSpan) || (playerMeasurement.Length != playerManager.localPlayer.Data.PlayerMeasurement.Length)))
+                }
+                sceneChanged = false;
+            }
+			if (measurementGot && ((playerMeasurement.ArmSpan != PlayerManager.instance.localPlayer.Data.PlayerMeasurement.ArmSpan) || (playerMeasurement.Length != PlayerManager.instance.localPlayer.Data.PlayerMeasurement.Length)))
 			{
 				StoreTPose();
-				playerMeasurement = playerManager.localPlayer.Data.PlayerMeasurement;
+				playerMeasurement = PlayerManager.instance.localPlayer.Data.PlayerMeasurement;
 			}
 			if (init && (currentScene == "Loader") && (status.GetComponent<TextMeshProUGUI>().text == "Ready to RUMBLE!"))
 			{
-				coroutineObj = MelonCoroutines.Start(StartGymLoad());
+				MelonCoroutines.Start(StartGymLoad());
 			}
 		}
 
 		public IEnumerator StartGymLoad()
 		{
-			for (int i = 0; i < 100; i++)
-			{
-				yield return new WaitForFixedUpdate();
-			}
-			sceneManager.PerformStartupGymLoad();
-			MelonCoroutines.Stop(coroutineObj);
+			yield return new WaitForSeconds(2);
+            SceneManager.instance.PerformStartupGymLoad();
+			yield break;
 		}
-
+		
 		public void SetTPose()
         {
             try
@@ -106,8 +98,8 @@ namespace LoaderSkipper
 				rController.transform.position = new Vector3(float.Parse(fileText[6]), float.Parse(fileText[7]), float.Parse(fileText[8]));
 				root = new GameObject();
 				root.transform.position = new Vector3(float.Parse(fileText[9]), float.Parse(fileText[10]), float.Parse(fileText[11]));
-				playerManager.localPlayer.Data.SetMeasurement(PlayerMeasurement.Create(head.transform, lController.transform, rController.transform, root.transform, true));
-				playerMeasurement = playerManager.localPlayer.Data.PlayerMeasurement;
+                PlayerManager.instance.localPlayer.Data.SetMeasurement(PlayerMeasurement.Create(head.transform, lController.transform, rController.transform, root.transform, true));
+				playerMeasurement = PlayerManager.instance.localPlayer.Data.PlayerMeasurement;
 				GameObject.Destroy(head);
 				GameObject.Destroy(lController);
 				GameObject.Destroy(rController);
@@ -121,10 +113,10 @@ namespace LoaderSkipper
 
 		public static void StoreTPose()
 		{
-			measurements[0] = playerManager.localPlayer.Controller.gameObject.transform.GetChild(1).GetChild(0).GetChild(0);
-			measurements[1] = playerManager.localPlayer.Controller.gameObject.transform.GetChild(1).GetChild(1).GetChild(0);
-			measurements[2] = playerManager.localPlayer.Controller.gameObject.transform.GetChild(1).GetChild(2).GetChild(0);
-			measurements[3] = playerManager.localPlayer.Controller.gameObject.transform.GetChild(1).GetChild(3);
+			measurements[0] = PlayerManager.instance.localPlayer.Controller.gameObject.transform.GetChild(1).GetChild(0).GetChild(0);
+			measurements[1] = PlayerManager.instance.localPlayer.Controller.gameObject.transform.GetChild(1).GetChild(1).GetChild(0);
+			measurements[2] = PlayerManager.instance.localPlayer.Controller.gameObject.transform.GetChild(1).GetChild(2).GetChild(0);
+			measurements[3] = PlayerManager.instance.localPlayer.Controller.gameObject.transform.GetChild(1).GetChild(3);
 			string[] textToStore = new string[12];
 			textToStore[0] = measurements[0].position.x.ToString();
 			textToStore[1] = measurements[0].position.y.ToString();
